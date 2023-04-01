@@ -1,0 +1,174 @@
+swagger: '2.0'
+info:
+  description: Api Documentation
+  version: '1.0'
+  title: Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+host: localhost:8097
+basePath: /
+tags:
+  - name: main-controller
+    description: Отладка транзакций
+paths:
+  /api/accounts:
+    get:
+      tags:
+        - main-controller
+      summary: getAccounts
+      operationId: getAccountsUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccountDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /api/entries:
+    get:
+      tags:
+        - main-controller
+      summary: getEntries
+      operationId: getEntriesUsingGET
+      produces:
+        - '*/*'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/EntryDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /api/entries/create:
+    post:
+      tags:
+        - main-controller
+      summary: createEntry
+      operationId: createEntryUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: requestDto
+          description: requestDto
+          required: true
+          schema:
+            $ref: '#/definitions/CreateEntryDto'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResultDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /api/entries/process/{id}:
+    post:
+      tags:
+        - main-controller
+      summary: processEntry
+      operationId: processEntryUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResultDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+definitions:
+  AccountDto:
+    type: object
+    properties:
+      accountId:
+        type: integer
+        format: int64
+      accountNumber:
+        type: string
+      rest:
+        type: number
+    title: AccountDto
+  CreateEntryDto:
+    type: object
+    properties:
+      creditAccountId:
+        type: integer
+        format: int64
+      date:
+        type: string
+        format: date-time
+      debitAccountId:
+        type: integer
+        format: int64
+      purpose:
+        type: string
+      sum:
+        type: number
+    title: CreateEntryDto
+  EntryDto:
+    type: object
+    properties:
+      creditAccountId:
+        type: integer
+        format: int64
+      creditAccountNumber:
+        type: string
+      date:
+        type: string
+        format: date-time
+      debitAccountId:
+        type: integer
+        format: int64
+      debitAccountNumber:
+        type: string
+      entryId:
+        type: integer
+        format: int64
+      purpose:
+        type: string
+      sum:
+        type: number
+    title: EntryDto
+  ResultDto:
+    type: object
+    title: ResultDto
